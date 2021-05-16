@@ -17,6 +17,9 @@ VERSION = os.getenv("VERSION", "1.0.1")
 HEALTH_MIN = os.getenv('HEALTH_MIN', 0)
 HEALTH_MAX = os.getenv('HEALTH_MAX', 0)
 
+SLOW = int(os.getenv('SLOW', 0))
+
+HOSTNAME = os.getenv('HOSTNAME', 'unknown_hostname')
 DEBUG = True
 
 if DEBUG:
@@ -38,7 +41,7 @@ class Endpoint0(tornado.web.RequestHandler):
             self.write(json_encode(
                 {
                     "version" : VERSION,
-                    "host" : self.request.host,
+                    "host" : HOSTNAME,
                     "result" : "all is well"
                 }
             ))
@@ -80,6 +83,7 @@ class Info(tornado.web.RequestHandler):
                 {
                     "version" : VERSION,
                     "host" : self.request.host,
+                    "hostname": HOSTNAME,
                     "from" : self.request.remote_ip
                 }
             ))
@@ -141,6 +145,9 @@ class Secrets(tornado.web.RequestHandler):
 
 
 if __name__ == "__main__":
+    if SLOW > 0:
+        time.sleep(SLOW)
+
     app = tornado.web.Application([
         (r"/", Endpoint0),
         (r"/endpoint", Endpoint0),
