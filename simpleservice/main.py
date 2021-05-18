@@ -130,6 +130,19 @@ class Secrets(tornado.web.RequestHandler):
                     result.append(os.path.join(root, file))
                 for dir in dirs:
                     result.append(os.path.join(root, dir))
+
+            for root, dirs, files in os.walk('/config'):
+                for file in files:
+                    result.append(os.path.join(root, file))
+                for dir in dirs:
+                    result.append(os.path.join(root, dir))
+
+            for root, dirs, files in os.walk('/secrets'):
+                for file in files:
+                    result.append(os.path.join(root, file))
+                for dir in dirs:
+                    result.append(os.path.join(root, dir))
+
             result.sort()
 
             self.write(json_encode(
